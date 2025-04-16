@@ -1,14 +1,16 @@
+"use client";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import Loader from "../../Loader";
+import Link from "next/link";
+import Loader from "@/components/Loader";
 import {
   deleteShopEvent,
   getAllShopEvents,
-} from "../../../redux/actions/event";
+} from "@/redux/actions/event";
 
 function ShopAllEvents() {
   const { events, isLoading } = useSelector((state) => state.events);
@@ -21,12 +23,9 @@ function ShopAllEvents() {
     }
   }, [dispatch, seller._id]);
 
-  console.log(events);
-
-  const handleDelete = (id) => {
-    console.log(id);
-    dispatch(deleteShopEvent(id));
-    window.location.reload();
+  const handleDelete = async (id) => {
+    await dispatch(deleteShopEvent(id));
+    dispatch(getAllShopEvents(seller._id)); // Refresh events without reload
   };
 
   const columns = [
@@ -66,7 +65,7 @@ function ShopAllEvents() {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/product/${params.id}?isEvent=true`}>
+          <Link href={`/product/${params.id}?isEvent=true`}>
             <Button>
               <AiOutlineEye size={20} />
             </Button>

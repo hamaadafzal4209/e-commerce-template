@@ -1,14 +1,16 @@
+"use client";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteShopProducts,
   getAllShopProducts,
-} from "../../../redux/actions/product";
+} from "@/redux/actions/product";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import Loader from "../../Loader";
+import Link from "next/link";
+import Loader from "@/components/Loader";
 
 function ShopAllProducts() {
   const { products, isLoading } = useSelector((state) => state.products);
@@ -21,28 +23,35 @@ function ShopAllProducts() {
     }
   }, [dispatch, seller._id]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteShopProducts(id));
-    window.location.reload();
+  const handleDelete = async (id) => {
+    await dispatch(deleteShopProducts(id));
+    dispatch(getAllShopProducts(seller._id)); // Refresh products without reload
   };
 
   const columns = [
-    { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.8, align: 'left', headerAlign: 'left' },
+    {
+      field: "id",
+      headerName: "Product Id",
+      minWidth: 150,
+      flex: 0.8,
+      align: "left",
+      headerAlign: "left",
+    },
     {
       field: "name",
       headerName: "Name",
       minWidth: 180,
       flex: 1.5,
-      align: 'left',
-      headerAlign: 'left',
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "price",
       headerName: "Price",
       minWidth: 120,
       flex: 0.8,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
     },
     {
       field: "stock",
@@ -50,8 +59,8 @@ function ShopAllProducts() {
       type: "number",
       minWidth: 100,
       flex: 0.6,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
     },
     {
       field: "sold",
@@ -59,8 +68,8 @@ function ShopAllProducts() {
       type: "number",
       minWidth: 130,
       flex: 0.7,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
     },
     {
       field: "preview",
@@ -68,11 +77,11 @@ function ShopAllProducts() {
       minWidth: 100,
       headerName: "Preview",
       sortable: false,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         return (
-          <Link to={`/product/${encodeURIComponent(params.row.name)}`}>
+          <Link href={`/product/${encodeURIComponent(params.row.name)}`}>
             <Button>
               <AiOutlineEye size={20} />
             </Button>
@@ -86,8 +95,8 @@ function ShopAllProducts() {
       minWidth: 120,
       headerName: "Delete",
       sortable: false,
-      align: 'center',
-      headerAlign: 'center',
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => {
         return (
           <Button onClick={() => handleDelete(params.row.id)}>

@@ -1,11 +1,13 @@
+"use client";
+
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllOrdersOfUser } from "../../redux/actions/order";
-import Loader from "../Loader";
+import { getAllOrdersOfUser } from "../redux/actions/order";
+import Loader from "./Loader";
 
 function AllRefundOrders() {
   const { orders, isLoading } = useSelector((state) => state.orders);
@@ -52,7 +54,7 @@ function AllRefundOrders() {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/user/order/${params.id}`}>
+          <Link href={`/user/order/${params.id}`}>
             <Button>
               <AiOutlineArrowRight size={20} />
             </Button>
@@ -62,12 +64,14 @@ function AllRefundOrders() {
     },
   ];
 
-  const rows = eligibleOrders.map((item) => ({
-    id: item._id,
-    itemsQty: item.cart.length,
-    total: "US$ " + item.totalPrice,
-    status: item.status,
-  }));
+  const rows = eligibleOrders
+    ? eligibleOrders.map((item) => ({
+        id: item._id,
+        itemsQty: item.cart.length,
+        total: "US$ " + item.totalPrice,
+        status: item.status,
+      }))
+    : [];
 
   return (
     <>

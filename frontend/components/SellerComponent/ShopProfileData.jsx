@@ -1,19 +1,23 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import ProductCard from "../ProductCard";
-import { Link, useParams } from "react-router-dom";
+import ProductCard from "./ProductCard";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllShopProducts } from "../../redux/actions/product";
-import Ratings from "../Ratings";
+import { getAllShopProducts } from "../redux/actions/product";
+import Ratings from "./Ratings";
 import moment from "moment";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-// import { backend_url } from "../../server";
+import Image from "next/image";
 
 const REVIEWS_PER_PAGE = 5;
 
 function ShopProfileData({ isOwner }) {
   const { products } = useSelector((state) => state.products);
   const { events } = useSelector((state) => state.events);
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id;
   const dispatch = useDispatch();
   const [active, setActive] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,11 +74,11 @@ function ShopProfileData({ isOwner }) {
         </div>
         {isOwner ? (
           <button className="inline-block rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition duration-300 hover:bg-blue-700">
-            <Link to="/dashboard">Go to dashboard</Link>
+            <Link href="/dashboard">Go to dashboard</Link>
           </button>
         ) : (
           <button className="inline-block rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition duration-300 hover:bg-blue-700">
-            <Link to="/">Go to Home</Link>
+            <Link href="/">Go to Home</Link>
           </button>
         )}
       </div>
@@ -119,12 +123,16 @@ function ShopProfileData({ isOwner }) {
           {paginatedReviews &&
             paginatedReviews.map((item, index) => (
               <div key={index} className="my-4 flex w-full border-b pb-4">
-                <img
+                <Image
                   src={
-                    "https://cdn-icons-png.flaticon.com/128/9131/9131529.png"
+                    item.user.avatar
+                      ? `${backend_url}/${item.user.avatar}`
+                      : "https://cdn-icons-png.flaticon.com/128/9131/9131529.png"
                   }
                   className="h-10 w-10 rounded-full"
                   alt="User Avatar"
+                  width={40}
+                  height={40}
                 />
                 <div className="pl-4">
                   <div className="flex w-full items-center">

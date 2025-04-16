@@ -1,19 +1,24 @@
+"use client";
+
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url, server } from "../../server";
+import { backend_url, server } from "../lib/server";
 import { CgProfile } from "react-icons/cg";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import Link from "next/link";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAllShopProducts } from "../../redux/actions/product";
-import Loader from "../Loader";
+import { getAllShopProducts } from "../redux/actions/product";
+import Loader from "./Loader";
+import Image from "next/image";
 
 function ShopInfo({ isOwner }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [data, setData] = useState({});
   const { products } = useSelector((state) => state.products);
   const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,8 +42,8 @@ function ShopInfo({ isOwner }) {
         withCredentials: true,
       });
       toast.success(res.data.message);
-      window.location.reload();
-      navigate("/");
+      router.push("/");
+      // Removed window.location.reload()
     } catch (error) {
       console.log(error.message);
       toast.error(error.response?.data?.message || "Logout failed");
@@ -68,10 +73,16 @@ function ShopInfo({ isOwner }) {
       <div>
         <div className="flex flex-col items-center">
           {data.avatar ? (
-            <img
-              src={`${backend_url}/${data.avatar}`}
+            <Image
+              src={
+                data.avatar
+                  ? `${backend_url}/${data.avatar}`
+                  : "/assets/fallback-image.png"
+              }
               alt="Seller Avatar"
               className="h-32 w-32 rounded-full border-4 border-gray-200 object-cover"
+              width={128}
+              height={128}
             />
           ) : (
             <CgProfile className="h-32 w-32 text-gray-400" />
@@ -104,7 +115,7 @@ function ShopInfo({ isOwner }) {
       </div>
       {isOwner && (
         <div className="mt-6 flex flex-col gap-4">
-          <Link to="/settings">
+          <Link href="/settings">
             <button className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white shadow-lg transition duration-300 hover:bg-blue-700">
               Edit Shop
             </button>

@@ -1,10 +1,12 @@
+"use client";
+
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllOrdersOfUser } from "../../redux/actions/order";
+import { getAllOrdersOfUser } from "../redux/actions/order";
 
 function AllOrders() {
   const { user } = useSelector((state) => state.user);
@@ -54,7 +56,7 @@ function AllOrders() {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/user/order/${params.id}`}>
+          <Link href={`/user/order/${params.id}`}>
             <Button>
               <AiOutlineArrowRight size={20} />
             </Button>
@@ -64,17 +66,14 @@ function AllOrders() {
     },
   ];
 
-  const rows = [];
-
-  orders &&
-    orders.forEach((item) => {
-      rows.push({
+  const rows = orders
+    ? orders.map((item) => ({
         id: item._id,
         itemsQty: item.cart.length,
         total: "US$ " + item.totalPrice,
         status: item.status,
-      });
-    });
+      }))
+    : [];
 
   return (
     <div className="w-full pl-6 pt-1 font-semibold">

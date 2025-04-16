@@ -1,19 +1,22 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { categoriesData } from "../../../lib/data";
+import { useRouter } from "next/navigation";
+import { categoriesData } from "../lib/data";
 import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import {
   clearErrors,
   resetProductState,
-} from "../../../redux/reducers/product";
-import { createProduct } from "../../../redux/actions/product";
+} from "../redux/reducers/product";
+import { createProduct } from "../redux/actions/product";
+import Image from "next/image";
 
 function CreateProduct() {
   const { seller } = useSelector((state) => state.seller);
   const { success, error } = useSelector((state) => state.products);
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [images, setImages] = useState([]);
@@ -26,16 +29,14 @@ function CreateProduct() {
   const [stock, setStock] = useState("");
 
   useEffect(() => {
-    console.log("Success:", success);
     if (success) {
       toast.success("Product created successfully");
       dispatch(resetProductState());
-      navigate("/dashboard");
+      router.push("/dashboard");
     }
-  }, [success, navigate, dispatch]);
+  }, [success, router, dispatch]);
 
   useEffect(() => {
-    console.log("Error:", error);
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
@@ -194,10 +195,12 @@ function CreateProduct() {
                       key={index}
                       className="h-20 w-20 overflow-hidden rounded-md"
                     >
-                      <img
+                      <Image
                         src={URL.createObjectURL(image)}
                         alt="product"
                         className="h-full w-full object-cover"
+                        width={80}
+                        height={80}
                       />
                     </div>
                   ))}

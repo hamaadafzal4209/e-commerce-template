@@ -1,11 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-// Removed: import { useParams } from "react-router-dom"; // Replaced with prop passing in Next.js
-import { server } from "@/lib/server"; // Updated import path for Next.js structure (was "../server")
+import axios from "axios";
+import { server } from "@/lib/server";
 
-function ActivationUser({ activation_token }) { // Added prop to receive activation_token from Next.js route
-  // Fixed: const { error, setError } = useState(false); // Incorrect destructuring syntax
-  const [error, setError] = useState(false); // Corrected to array destructuring for useState
+function ActivationUser({ activation_token }) {
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (activation_token) {
@@ -16,13 +14,13 @@ function ActivationUser({ activation_token }) { // Added prop to receive activat
           });
           console.log(res.data.message);
         } catch (error) {
-          console.log(error);
+          console.error(error);
           setError(true);
         }
       };
       activationEmail();
     }
-  }, [activation_token]); // Removed dependency on useParams, now depends on prop
+  }, [activation_token]);
 
   return (
     <div className="w-full h-screen flex items-center justify-center p-4">

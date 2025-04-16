@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 
 function Hero() {
   return (
@@ -21,7 +23,7 @@ function Hero() {
           the perfect products to enhance your lifestyle. Shop with confidence
           and convenience at our eCommerce platform.
         </p>
-        <Link to="/products" className="inline-block animate-fadeIn">
+        <Link href="/products" className="inline-block animate-fadeIn">
           <div className="rounded-md bg-black px-10 py-3">
             <span className="text-[18px] text-[#fff]">Shop Now</span>
           </div>

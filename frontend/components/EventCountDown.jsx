@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
+"use client";
+
 import { useEffect, useState } from "react";
 
-function EventCountDown({data}) {
+function EventCountDown({ data }) {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
@@ -34,7 +36,10 @@ function EventCountDown({data}) {
     }
 
     return (
-      <span className="text-base md:text-[25px] text-[#475eda] font-semibold" key={interval}>
+      <span
+        className="text-base md:text-[25px] text-[#475eda] font-semibold"
+        key={interval}
+      >
         {value} {interval}{" "}
       </span>
     );
@@ -45,7 +50,7 @@ function EventCountDown({data}) {
       {timerComponent.length ? (
         timerComponent
       ) : (
-        <span className="text-red-600 text-lg font-semibold">Times Up</span>
+        <span className="text-red-600 text-lg font-semibold">Time's Up</span>
       )}
     </div>
   );

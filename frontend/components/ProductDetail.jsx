@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types */
+"use client";
+
 import { useState, useEffect } from "react";
 import {
   AiFillHeart,
@@ -10,16 +11,19 @@ import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import ProductDetailInfo from "./ProductDetailInfo";
 import { backend_url, server } from "../lib/server";
 import Loader from "./Loader";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocartAction, removeFromCartAction } from "../redux/actions/cart";
 import {
   addToWishlistAction,
   removeFromWishlistAction,
-} from "../redux/actions/whishlist";
+} from "../redux/actions/wishlist";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// Props:
+// - data: Object containing product details (_id, images, name, description, originalPrice, discountPrice, shop, reviews)
 function ProductDetail({ data }) {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
@@ -27,7 +31,7 @@ function ProductDetail({ data }) {
   const [inCart, setInCart] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const cart = useSelector((state) => state.cart.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { wishlist = [] } = useSelector((state) => state.wishlist);
@@ -65,8 +69,8 @@ function ProductDetail({ data }) {
           sellerId,
         })
         .then((res) => {
-          navigate(`/conversation/${res.data.conversation._id}`);
-                })
+          router.push(`/conversation/${res.data.conversation._id}`);
+        })
         .catch((error) => {
           toast.error(error.response.data.message);
         });
@@ -102,8 +106,7 @@ function ProductDetail({ data }) {
     );
   }
 
-  const { images, name, description, originalPrice, discountPrice, shop } =
-    data;
+  const { images, name, description, originalPrice, discountPrice, shop } = data;
 
   // Ensure images array and shop are not empty
   if (!images || images.length === 0) {
@@ -119,7 +122,7 @@ function ProductDetail({ data }) {
     products.reduce(
       (acc, product) =>
         acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
-      0,
+      0
     );
 
   const avg = totalRatings / productReviewsLength || 0;
@@ -129,20 +132,22 @@ function ProductDetail({ data }) {
   return (
     <div className="bg-white">
       {data ? (
-        <div className="section">
+        <div className="container mx-auto px-4">
           {/* product details */}
           <div className="w-full py-5">
             <div className="flex flex-col items-start gap-6 md:flex-row">
               {/* left section */}
               <div className="flex w-full flex-col items-center md:w-1/2">
-                <img
+                <Image
                   src={
                     images && images.length > 0
                       ? `${backend_url}/${images[select]}`
-                      : "path/to/placeholder-image.jpg"
+                      : "/assets/fallback-image.png"
                   }
                   className="mb-4 max-h-[350px] w-[80%] object-contain"
                   alt={name || "Product Image"}
+                  width={400}
+                  height={350}
                 />
                 <div className="flex w-full items-center justify-center gap-4 overflow-x-auto">
                   {images &&
@@ -153,10 +158,12 @@ function ProductDetail({ data }) {
                           select === index ? "border" : ""
                         } cursor-pointer`}
                       >
-                        <img
+                        <Image
                           src={`${backend_url}/${i}`}
                           alt={`Thumbnail ${index + 1}`}
-                          className="w mr-3 mt-3 h-24 flex-shrink-0 overflow-hidden object-contain"
+                          className="mr-3 mt-3 h-24 flex-shrink-0 overflow-hidden object-contain"
+                          width={96}
+                          height={96}
                           onClick={() => setSelect(index)}
                         />
                       </div>
@@ -241,18 +248,20 @@ function ProductDetail({ data }) {
                 <div className="my-8 flex flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-6">
                   <div className="flex items-center gap-2">
                     <div>
-                      <img
+                      <Image
                         src={
                           shop?.avatar
                             ? `${backend_url}/${shop.avatar}`
-                            : "path/to/placeholder-image.jpg"
+                            : "/assets/fallback-image.png"
                         }
                         className="h-12 w-12 rounded-full"
                         alt={shop?.name || "Shop Avatar"}
+                        width={48}
+                        height={48}
                       />
                     </div>
                     <div>
-                      <Link to={`/shop/preview/${data?.shop._id}`}>
+                      <Link href={`/shop/preview/${data?.shop._id}`}>
                         <h3 className="text-[15px] text-blue-400">
                           {shop?.name || "Unknown Shop"}
                         </h3>

@@ -1,10 +1,14 @@
+"use client";
+
 import { RxCross1 } from "react-icons/rx";
 import { IoBagHandleOutline } from "react-icons/io5";
 import SingleCart from "./SingleCart";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocartAction, removeFromCartAction } from "../redux/actions/cart";
 
+// Props:
+// - setOpenCart: Function to close the cart popup
 const CartPopUp = ({ setOpenCart }) => {
   const { cart = [] } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
@@ -46,7 +50,7 @@ const CartPopUp = ({ setOpenCart }) => {
               ))}
             </div>
             <div className="border-t border-[#e1e1e1] p-5 mt-auto">
-              <Link to="/checkout">
+              <Link href="/checkout">
                 <div className="flex h-[45px] w-full items-center justify-center rounded-[5px] bg-[#e44343]">
                   <h1 className="text-[18px] font-[600] text-white">
                     Checkout Now (USD$ {totalPrice.toFixed(2)})

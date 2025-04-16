@@ -1,7 +1,9 @@
+"use client";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getAllOrdersOfUser } from "../../redux/actions/order";
+import { useParams } from "next/navigation";
+import { getAllOrdersOfUser } from "../redux/actions/order";
 import {
   MdLocalShipping,
   MdCheckCircle,
@@ -9,12 +11,13 @@ import {
   MdOutlineAutorenew,
 } from "react-icons/md";
 
-const TrackOrder = () => {
+function TrackOrder() {
   const { orders } = useSelector((state) => state.orders);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id;
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
@@ -85,6 +88,6 @@ const TrackOrder = () => {
       <h1 className="mt-4 text-[20px]">{statusInfo.message}</h1>
     </div>
   );
-};
+}
 
 export default TrackOrder;

@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import {
   AiFillHeart,
   AiOutlineEye,
@@ -14,10 +17,10 @@ import { addTocartAction, removeFromCartAction } from "../redux/actions/cart";
 import {
   addToWishlistAction,
   removeFromWishlistAction,
-} from "../redux/actions/whishlist";
+} from "../redux/actions/whishlist.js";
 import Ratings from "./Ratings";
 
-function ProductCard({ data,isEvent }) {
+function ProductCard({ data, isEvent }) {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
   const [inCart, setInCart] = useState(false);
@@ -63,29 +66,32 @@ function ProductCard({ data,isEvent }) {
   return (
     <>
       <div className="relative h-[370px] w-full cursor-pointer rounded-lg bg-white p-3 shadow-sm md:max-w-72">
-        <Link to={
-           isEvent === true
-           ? `/product/${data._id}?isEvent=true`
-           : `/product/${data._id}`
-        }>
-          {" "}
-          {/* Update the Link to use productId */}
-          <img
+        <Link
+          href={
+            isEvent === true
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }
+        >
+          <Image
             src={
               data.images && data.images.length > 0
                 ? `${backend_url}/${data.images[0]}`
                 : "https://cdn-icons-png.flaticon.com/128/44/44289.png"
             }
-            className="h-[170px] w-11/12 object-contain pr-2"
             alt={data.name}
+            width={200}
+            height={170}
+            className="h-[170px] w-11/12 object-contain pr-2"
+            unoptimized // Use if backend_url is external and not configured in next.config.js
           />
         </Link>
-        <Link to={`/shop/preview/${data?.shop._id}`}>
+        <Link href={`/shop/preview/${data?.shop._id}`}>
           <h5 className="py-3 text-[15px] text-blue-400">
             {data.shop?.name || "Unknown Shop"}
           </h5>
         </Link>
-        <Link to={`/product/${productId}`}>
+        <Link href={`/product/${productId}`}>
           <h5 className="mb-2 line-clamp-2 font-medium">{data?.name}</h5>
         </Link>
         <div className="flex">

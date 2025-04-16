@@ -1,12 +1,13 @@
-/* eslint-disable no-unused-vars */
+"use client";
+
 import { useState } from "react";
-import CartData from "./CartData";
 import ShippingInfo from "./ShippingInfo";
+import CartData from "./CartData";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../../lib/server";
+import { server } from "../lib/server";
 
 function CheckOut() {
   const { user } = useSelector((state) => state.user);
@@ -22,7 +23,7 @@ function CheckOut() {
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const paymentSubmit = (e) => {
     e.preventDefault();
@@ -55,16 +56,16 @@ function CheckOut() {
       };
 
       localStorage.setItem("latestOrder", JSON.stringify(orderData));
-      navigate("/payment");
+      router.push("/payment");
     }
   };
 
   const subTotalPrice = cart.reduce(
     (acc, item) => acc + item.qty * item.discountPrice,
-    0,
+    0
   );
 
-  // this is shipping cost variable
+  // This is shipping cost variable
   const shipping = subTotalPrice * 0.1;
 
   const handleSubmit = async (e) => {
@@ -86,7 +87,7 @@ function CheckOut() {
           } else {
             const eligiblePrice = isCouponValid.reduce(
               (acc, item) => acc + item.qty * item.discountPrice,
-              0,
+              0
             );
             const discountPrice = (eligiblePrice * couponCodeValue) / 100;
             setDiscountPrice(discountPrice);
@@ -95,7 +96,7 @@ function CheckOut() {
           }
         }
         if (res.data.couponCode === null) {
-          toast.error("Coupon code doesn't exists!");
+          toast.error("Coupon code doesn't exist!");
           setCouponCode("");
         }
       });
@@ -136,7 +137,7 @@ function CheckOut() {
         />
       </div>
       <div
-        className={`mx-auto my-3 mb-10 mt-10 flex h-[50px] w-[150px] cursor-pointer items-center justify-center rounded-xl bg-black md:w-[280px]`}
+        className="mx-auto my-3 mb-10 mt-10 flex h-[50px] w-[150px] cursor-pointer items-center justify-center rounded-xl bg-black md:w-[280px]"
         onClick={paymentSubmit}
       >
         <h5 className="text-white">Go to Payment</h5>

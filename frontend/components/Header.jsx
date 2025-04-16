@@ -1,6 +1,10 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { categoriesData, navItems } from "../lib/data";
-import { Link, NavLink } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -9,14 +13,14 @@ import {
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
-import classNames from "classnames";
+import { RxCross1 } from "react-icons/rx";
+import clsx from "clsx";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 import { backend_url } from "../lib/server";
 import CartPopUp from "./CartPopUp";
 import WhishListPopUp from "./WhishListPopUp";
-import { RxCross1 } from "react-icons/rx";
 
 function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -31,6 +35,7 @@ function Header() {
   const [openCart, setOpenCart] = useState(false);
   const [openWhishlist, setOpenWhishlist] = useState(false);
   const [openNavbar, setOpenNNavbar] = useState(false);
+  const pathname = usePathname();
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -39,7 +44,7 @@ function Header() {
     const filterProducts =
       allProducts &&
       allProducts.filter((product) =>
-        product.name.toLowerCase().includes(term.toLowerCase()),
+        product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filterProducts);
   };
@@ -57,7 +62,6 @@ function Header() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -65,14 +69,16 @@ function Header() {
 
   return (
     <>
-      <div className="section">
+      <div className="container mx-auto px-4">
         {/* top navbar section */}
         <div className="relative my-[20px] hidden h-[50px] items-center justify-between md:flex">
           <div>
-            <Link to="/">
-              <img
-                src="../../public/assets/logo.jpeg"
+            <Link href="/">
+              <Image
+                src="/assets/logo.jpeg"
                 alt="Logo"
+                width={130}
+                height={50}
                 className="w-[200px] lg:w-[130px]"
               />
             </Link>
@@ -100,14 +106,17 @@ function Header() {
                   searchData.map((item) => (
                     <Link
                       key={`${item._id}-${item.name}`}
-                      to={`/product/${item._id}`}
+                      href={`/product/${item._id}`}
                     >
                       <div className="flex w-full items-start py-2 hover:bg-gray-100">
                         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center">
-                          <img
+                          <Image
                             src={`${backend_url}/${item?.images[0]}`}
                             alt={item.name}
+                            width={40}
+                            height={40}
                             className="mr-2 h-full w-full object-contain"
+                            unoptimized
                           />
                         </div>
                         <h1 className="line-clamp-2">{item.name}</h1>
@@ -120,9 +129,9 @@ function Header() {
           </div>
           {/* seller button */}
           <div className="my-3 flex items-center gap-2 rounded-md bg-indigo-800 px-5 py-3 text-white">
-            <Link to={isSeller ? "/dashboard" : "/shop-create"}>
+            <Link href={isSeller ? "/dashboard" : "/shop-create"}>
               <div className="flex items-center justify-center text-[#fff]">
-                <h1>{isSeller ? "DashBoard" : " Become Seller"}</h1>
+                <h1>{isSeller ? "DashBoard" : "Become Seller"}</h1>
                 {!isSeller && <IoIosArrowForward className="ml-1" />}
               </div>
             </Link>
@@ -131,13 +140,15 @@ function Header() {
       </div>
       {/* mobile navbar */}
       <div className="sticky top-0 z-[250] bg-white pb-2 shadow-md md:hidden">
-        <div className="section flex h-14 w-full items-center justify-between">
+        <div className="container mx-auto px-4 flex h-14 w-full items-center justify-between">
           {/* mobile logo */}
           <div>
-            <Link to="/">
-              <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
+            <Link href="/">
+              <Image
+                src="/assets/logo.jpeg"
                 alt="Logo"
+                width={120}
+                height={40}
                 className="w-[120px]"
               />
             </Link>
@@ -165,15 +176,18 @@ function Header() {
               </div>
               <div className="flex-shrink-0 cursor-pointer">
                 {isAuthenticated ? (
-                  <Link to="/profile">
-                    <img
+                  <Link href="/profile">
+                    <Image
                       src={`${backend_url}/${user?.avatar}`}
+                      alt="User avatar"
+                      width={32}
+                      height={32}
                       className="h-8 w-8 rounded-full object-cover object-top"
-                      alt=""
+                      unoptimized
                     />
                   </Link>
                 ) : (
-                  <Link to="/login">
+                  <Link href="/login">
                     <CgProfile size={30} className="text-black" />
                   </Link>
                 )}
@@ -185,7 +199,7 @@ function Header() {
           </div>
         </div>
         {/* search bar */}
-        <div className="section w-full">
+        <div className="container mx-auto px-4 w-full">
           <input
             type="search"
             placeholder="Search Products..."
@@ -194,7 +208,7 @@ function Header() {
             className="block w-full rounded-lg border-2 border-blue-600 bg-gray-50 p-2 text-gray-900 focus:ring-blue-600"
           />
           {searchTerm && searchData && (
-            <div className="section absolute top-full z-10 mt-2 w-full bg-white p-4 shadow-lg">
+            <div className="container mx-auto px-4 absolute top-full z-10 mt-2 w-full bg-white p-4 shadow-lg">
               {searchData.length === 0 ? (
                 <div className="flex w-full items-start py-2">
                   <h1>No products found</h1>
@@ -203,14 +217,17 @@ function Header() {
                 searchData.map((item) => (
                   <Link
                     key={`${item._id}-${item.name}`}
-                    to={`/product/${item._id}`}
+                    href={`/product/${item._id}`}
                   >
                     <div className="flex w-full items-start py-2 hover:bg-gray-100">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center">
-                        <img
+                        <Image
                           src={`${backend_url}/${item?.images[0]}`}
                           alt={item.name}
+                          width={40}
+                          height={40}
                           className="mr-2 h-full w-full object-contain"
+                          unoptimized
                         />
                       </div>
                       <h1 className="line-clamp-2">{item.name}</h1>
@@ -235,25 +252,24 @@ function Header() {
             <ul className="flex flex-col gap-4 pl-6 pt-14">
               {navItems.map((item, index) => (
                 <li key={index} className="list-none">
-                  <NavLink
-                    to={item.url}
-                    className={({ isActive }) =>
-                      `font-semibold transition-colors duration-200 ${
-                        isActive
-                          ? "text-indigo-800"
-                          : "text-black hover:text-indigo-900"
-                      }`
-                    }
+                  <Link
+                    href={item.url}
+                    className={clsx(
+                      "font-semibold transition-colors duration-200",
+                      pathname === item.url
+                        ? "text-indigo-800"
+                        : "text-black hover:text-indigo-900"
+                    )}
                   >
                     {item.title}
-                  </NavLink>
+                  </Link>
                 </li>
               ))}
             </ul>
             <div className="flex w-full cursor-pointer items-center justify-center">
-              <Link to={isSeller ? "/dashboard" : "/shop-create"}>
+              <Link href={isSeller ? "/dashboard" : "/shop-create"}>
                 <div className="my-3 flex items-center gap-2 rounded-md bg-indigo-800 px-9 py-3 text-white">
-                  <h1>{isSeller ? "Shop DashBoard" : " Become Seller"}</h1>
+                  <h1>{isSeller ? "Shop DashBoard" : "Become Seller"}</h1>
                   {!isSeller && <IoIosArrowForward className="ml-1" />}
                 </div>
               </Link>
@@ -263,12 +279,12 @@ function Header() {
       )}
       {/* bottom navbar */}
       <div
-        className={classNames("z-30 h-[70px] w-full", {
+        className={clsx("z-30 h-[70px] w-full", {
           "sticky top-0 bg-[#3321c8] shadow-md": active,
           "hidden bg-[#3321c8] md:block": !active,
         })}
       >
-        <div className="section flex items-center justify-between">
+        <div className="container mx-auto px-4 flex items-center justify-between">
           {/* categories */}
           <div
             onClick={() => setDropDown(!dropDown)}
@@ -279,7 +295,7 @@ function Header() {
               className="absolute left-2 top-1/2 mt-1.5 -translate-y-1/2"
             />
             <button
-              className={`font-sans mt-[10px] flex h-[60px] w-full select-none items-center justify-between rounded-t-md bg-white pl-10 text-lg font-[500]`}
+              className="font-sans mt-[10px] flex h-[60px] w-full select-none items-center justify-between rounded-t-md bg-white pl-10 text-lg font-[500]"
             >
               All Categories
             </button>
@@ -324,15 +340,18 @@ function Header() {
               </div>
               <div className="flex-shrink-0 cursor-pointer">
                 {isAuthenticated ? (
-                  <Link to="/profile">
-                    <img
+                  <Link href="/profile">
+                    <Image
                       src={`${backend_url}/${user?.avatar}`}
+                      alt="User avatar"
+                      width={32}
+                      height={32}
                       className="h-8 w-8 rounded-full object-cover object-top"
-                      alt=""
+                      unoptimized
                     />
                   </Link>
                 ) : (
-                  <Link to="/login">
+                  <Link href="/login">
                     <CgProfile size={30} className="text-white opacity-75" />
                   </Link>
                 )}
@@ -343,7 +362,7 @@ function Header() {
       </div>
       {/* cart popup */}
       {openCart && <CartPopUp setOpenCart={setOpenCart} />}
-      {/* whishlist popup */}
+      {/* wishlist popup */}
       {openWhishlist && <WhishListPopUp setOpenWhishlist={setOpenWhishlist} />}
     </>
   );

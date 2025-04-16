@@ -1,13 +1,15 @@
+"use client";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { getAllOrdersOfShop } from "../../../redux/actions/order";
-import Loader from "../../Loader";
+import { getAllOrdersOfShop } from "../redux/actions/order";
+import Loader from "./Loader";
 
-const DashAllRefundOrders = () => {
+function DashAllRefundOrders() {
   const { orders, isLoading } = useSelector((state) => state.orders);
   const { seller } = useSelector((state) => state.seller);
 
@@ -26,7 +28,6 @@ const DashAllRefundOrders = () => {
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
     {
       field: "status",
       headerName: "Status",
@@ -45,7 +46,6 @@ const DashAllRefundOrders = () => {
       minWidth: 130,
       flex: 0.7,
     },
-
     {
       field: "total",
       headerName: "Total",
@@ -53,7 +53,6 @@ const DashAllRefundOrders = () => {
       minWidth: 130,
       flex: 0.8,
     },
-
     {
       field: "action",
       flex: 1,
@@ -63,7 +62,7 @@ const DashAllRefundOrders = () => {
       type: "Number",
       renderCell: (params) => {
         return (
-          <Link to={`/order/${params.row.id}`}>
+          <Link href={`/order/${params.row.id}`}>
             <Button>
               <AiOutlineArrowRight size={20} />
             </Button>
@@ -98,6 +97,6 @@ const DashAllRefundOrders = () => {
       )}
     </>
   );
-};
+}
 
 export default DashAllRefundOrders;

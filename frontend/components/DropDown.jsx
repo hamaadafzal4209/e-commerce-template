@@ -1,11 +1,18 @@
-import { useNavigate } from "react-router-dom";
+"use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+// Props:
+// - categoriesData: Array of objects with id, title, image_Url
+// - setDropDown: Function to close the dropdown
 function DropDown({ categoriesData, setDropDown }) {
-  const navigate = useNavigate();
+  const router = useRouter();
+
   const handleSubmit = (item) => {
-    navigate(`/products?category=${item.title}`);
+    router.push(`/products?category=${item.title}`);
     setDropDown(false);
-    window.location.reload();
+    // Removed window.location.reload() to avoid full page refresh
   };
 
   return (
@@ -17,10 +24,12 @@ function DropDown({ categoriesData, setDropDown }) {
             className="flex items-center cursor-pointer hover:bg-gray-100"
             onClick={() => handleSubmit(item)}
           >
-            <img
-              src={item.image_Url}
+            <Image
+              src={item.image_Url || "/assets/fallback-image.png"}
               className="w-6 h-6 object-contain ml-2.5 select-none"
-              alt=""
+              alt={item.title || "Category"}
+              width={24}
+              height={24}
             />
             <h3 className="m-3 select-none">{item.title}</h3>
           </div>

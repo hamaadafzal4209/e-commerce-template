@@ -1,11 +1,13 @@
+"use client";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import Loader from "../../Loader";
-import { getAllOrdersOfShop } from "../../../redux/actions/order";
+import Link from "next/link";
+import Loader from "@/components/Loader";
+import { getAllOrdersOfShop } from "@/redux/actions/order";
 
 function ShopAllOrders() {
   const { orders, isLoading } = useSelector((state) => state.orders);
@@ -20,7 +22,6 @@ function ShopAllOrders() {
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
     {
       field: "status",
       headerName: "Status",
@@ -37,7 +38,6 @@ function ShopAllOrders() {
       minWidth: 130,
       flex: 0.7,
     },
-
     {
       field: "total",
       headerName: "Total",
@@ -45,7 +45,6 @@ function ShopAllOrders() {
       minWidth: 130,
       flex: 0.8,
     },
-
     {
       field: " ",
       flex: 1,
@@ -55,7 +54,7 @@ function ShopAllOrders() {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/order/${params.id}`}>
+          <Link href={`/order/${params.id}`}>
             <Button>
               <AiOutlineArrowRight size={20} />
             </Button>
@@ -65,17 +64,13 @@ function ShopAllOrders() {
     },
   ];
 
-  const rows = [];
-
-  orders &&
-    orders.forEach((item) => {
-      rows.push({
-        id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
-        status: item.status,
-      });
-    });
+  const rows =
+    orders?.map((item) => ({
+      id: item._id,
+      itemsQty: item.cart.length,
+      total: "US$ " + item.totalPrice,
+      status: item.status,
+    })) || [];
 
   return isLoading ? (
     <Loader />

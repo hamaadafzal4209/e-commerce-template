@@ -1,21 +1,25 @@
-/* eslint-disable no-unused-vars */
+"use client";
+
 import { useEffect, useState } from "react";
 import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { backend_url, server } from "../../server";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { getAllOrdersOfShop } from "../redux/actions/order";
+import { backend_url, server } from "../lib/server";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 function OrderDetails() {
   const { orders, isLoading } = useSelector((state) => state.orders);
   const { seller } = useSelector((state) => state.seller);
   const [status, setStatus] = useState();
 
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
@@ -34,14 +38,14 @@ function OrderDetails() {
       )
       .then((res) => {
         toast.success("Order updated!");
-        navigate("/dashboard-orders");
+        router.push("/dashboard-orders");
       })
       .catch((error) => {
         toast.error(error.response.data.message);
       });
   };
 
-  const refundOrderUpdateHandler = async (e) => {
+  const refundOrderUpdateHandler = async () => {
     await axios
       .put(
         `${server}/order/order-refund-success/${id}`,
@@ -67,7 +71,7 @@ function OrderDetails() {
           <h1 className="text-xl font-semibold">Order Details</h1>
         </div>
         <div className="">
-          <Link to="/dashboard-orders">
+          <Link href="/dashboard-orders">
             <button className="rounded-md bg-[#fce1e6] px-6 py-2 text-lg font-semibold text-[#e94560]">
               Order List
             </button>
@@ -89,10 +93,16 @@ function OrderDetails() {
         data?.cart.map((item, index) => (
           <div key={index} className="mb-5 flex w-full items-start gap-4">
             <div className="flex items-center justify-center bg-white">
-              <img
-                src={`${backend_url}/${item.images[0]}`}
+              <Image
+                src={
+                  item.images[0]
+                    ? `${backend_url}/${item.images[0]}`
+                    : "/assets/fallback-image.png"
+                }
                 className="h-20 w-20 bg-white object-contain"
-                alt=""
+                alt={item.name || "Product"}
+                width={80}
+                height={80}
               />
             </div>
             <div className="w-full">

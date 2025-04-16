@@ -1,15 +1,17 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { AiOutlineArrowRight, AiOutlineMoneyCollect } from "react-icons/ai";
-import { Link } from "react-router-dom";
 import { MdBorderClear } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import { getAllOrdersOfShop } from "../../../redux/actions/order";
-import { getAllShopProducts } from "../../../redux/actions/product";
-import Loader from "../../Loader";
+import Link from "next/link";
+import { getAllOrdersOfShop } from "@/redux/actions/order";
+import { getAllShopProducts } from "@/redux/actions/product";
+import Loader from "../Loader";
 
-const DashBoardHero = () => {
+function DashBoardHero() {
   const dispatch = useDispatch();
   const { orders, isLoading } = useSelector((state) => state.orders);
   const { seller } = useSelector((state) => state.seller);
@@ -21,7 +23,7 @@ const DashBoardHero = () => {
     dispatch(getAllShopProducts(seller._id));
 
     const orderData =
-      orders && orders.filter((item) => item.state === "Delivered");
+      orders && orders.filter((item) => item.status === "Delivered");
     setDeliveredOrder(orderData);
   }, [dispatch, seller._id, orders]);
 
@@ -66,29 +68,23 @@ const DashBoardHero = () => {
       sortable: false,
       renderCell: (params) => {
         return (
-          <>
-            <Link to={`/order/${params.id}`}>
-              <Button variant="contained" color="primary">
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
+          <Link href={`/order/${params.id}`}>
+            <Button variant="contained" color="primary">
+              <AiOutlineArrowRight size={20} />
+            </Button>
+          </Link>
         );
       },
     },
   ];
 
-  const row = [];
-
-  orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
-        total: "US$ " + item.totalPrice,
-        status: item.status,
-      });
-    });
+  const rows =
+    orders?.map((item) => ({
+      id: item._id,
+      itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
+      total: "US$ " + item.totalPrice,
+      status: item.status,
+    })) || [];
 
   return (
     <div className="w-full bg-gray-100 p-8">
@@ -105,7 +101,7 @@ const DashBoardHero = () => {
           </div>
           <h5 className="text-[22px] font-semibold">${availableBalance}</h5>
           <Link
-            to="/dashboard-withdraw-money"
+            href="/dashboard/withdraw-money"
             className="mt-4 inline-block text-blue-500"
           >
             Withdraw Money
@@ -123,7 +119,7 @@ const DashBoardHero = () => {
             {orders && orders.length}
           </h5>
           <Link
-            to="/dashboard-orders"
+            href="/dashboard/orders"
             className="mt-4 inline-block text-green-500"
           >
             View Orders
@@ -141,7 +137,7 @@ const DashBoardHero = () => {
             {products && products.length}
           </h5>
           <Link
-            to="/dashboard-products"
+            href="/dashboard/products"
             className="mt-4 inline-block text-red-500"
           >
             View Products
@@ -157,7 +153,7 @@ const DashBoardHero = () => {
           <Loader />
         ) : (
           <DataGrid
-            rows={row}
+            rows={rows}
             columns={columns}
             initialState={{
               pagination: {
@@ -174,6 +170,6 @@ const DashBoardHero = () => {
       </div>
     </div>
   );
-};
+}
 
 export default DashBoardHero;

@@ -1,13 +1,17 @@
-/* eslint-disable no-unused-vars */
+"use client";
+
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { backend_url, server } from "../../../server";
+import { backend_url, server } from "@/lib/server";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { IoImagesOutline } from "react-icons/io5";
 import socketIO from "socket.io-client";
-const ENDPOINT = "https://localhost:6000";
+import Image from "next/image";
+
+// Update to your WebSocket server URL
+const ENDPOINT = process.env.NEXT_PUBLIC_WEBSOCKET_URL || "https://your-websocket-server.com";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 function DashBoardMessages() {
@@ -24,6 +28,7 @@ function DashBoardMessages() {
   const [images, setImages] = useState();
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     socketId.on("getMessage", (data) => {
@@ -76,7 +81,6 @@ function DashBoardMessages() {
     return online ? true : false;
   };
 
-  // get messages
   useEffect(() => {
     const getMessage = async () => {
       try {
@@ -91,7 +95,6 @@ function DashBoardMessages() {
     getMessage();
   }, [currentChat]);
 
-  // create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
 
@@ -140,7 +143,6 @@ function DashBoardMessages() {
         lastMessageId: seller._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
         setNewMessage("");
       })
       .catch((error) => {
@@ -148,22 +150,8 @@ function DashBoardMessages() {
       });
   };
 
-  useEffect(() => {
-    axios
-      .get(`${server}/conversation/get-all-conversation-seller/${seller._id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setConversation(res.data.conversations);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [seller._id]);
-
   return (
     <div className="no-scrollbar m-3 h-[82vh] w-[90%] overflow-y-scroll rounded bg-white">
-      {/* all messages list */}
       {!open && (
         <>
           <h1 className="py-4 text-center font-Poppins text-2xl font-semibold">
@@ -205,7 +193,7 @@ function DashBoardMessages() {
   );
 }
 
-const MessageList = ({
+function MessageList({
   data,
   index,
   setOpen,
@@ -214,14 +202,14 @@ const MessageList = ({
   setUserData,
   online,
   setActiveStatus,
-  isLoading,
-}) => {
+}) {
   const [active, setActive] = useState(0);
-  const navigate = useNavigate();
 
   const handleClick = (id) => {
-    navigate(`?${id}`);
     setOpen(true);
+    setCurrentChat(data);
+    setActiveStatus(online);
+    setActive(index);
   };
 
   return (
@@ -229,18 +217,15 @@ const MessageList = ({
       className={`flex w-full cursor-pointer p-2 px-3 ${
         active === index ? "bg-gray-300" : "bg-transparent"
       }`}
-      onClick={() =>
-        setActive(index) ||
-        handleClick(data._id) ||
-        setCurrentChat(data) ||
-        setActiveStatus(online)
-      }
+      onClick={() => handleClick(data._id)}
     >
       <div className="relative">
-        <img
+        <Image
           className="h-12 w-12 flex-shrink-0 rounded-full"
           src="https://cdn-icons-png.flaticon.com/128/9131/9131529.png"
           alt="User Avatar"
+          width={48}
+          height={48}
         />
         <span className="absolute left-8 top-0 h-3.5 w-3.5 rounded-full border-2 border-white bg-green-400 dark:border-gray-800"></span>
       </div>
@@ -250,9 +235,9 @@ const MessageList = ({
       </div>
     </div>
   );
-};
+}
 
-const SellerInbox = ({
+function SellerInbox({
   scrollRef,
   setOpen,
   newMessage,
@@ -262,20 +247,26 @@ const SellerInbox = ({
   sellerId,
   userData,
   activeStatus,
-}) => {
+}) {
   return (
     <div className="flex min-h-full w-full flex-col justify-between">
       {/* message header */}
       <div className="flex w-full items-center justify-between bg-slate-200 p-4">
         <div className="flex items-center">
-          <img
-            src={`${backend_url}${userData?.avatar}`}
+          <Image
+            src={
+              userData?.avatar
+                ? `${backend_url}${userData.avatar}`
+                : "/assets/fallback-avatar.png"
+            }
             className="h-12 w-12 rounded-full"
             alt="User Avatar"
+            width={48}
+            height={48}
           />
           <div className="pl-3">
             <h1 className="text-lg font-semibold">Hamaad Afzal</h1>
-            <p>Active now</p>
+            <p>{activeStatus ? "Active now" : "Offline"}</p>
           </div>
         </div>
         <div>
@@ -290,10 +281,16 @@ const SellerInbox = ({
       {/* messages */}
       <div className="no-scrollbar h-[55vh] overflow-y-scroll p-4">
         <div className="flex items-center gap-2">
-          <img
-            src={`${backend_url}${userData?.avatar}`}
-            alt=""
+          <Image
+            src={
+              userData?.avatar
+                ? `${backend_url}${userData.avatar}`
+                : "/assets/fallback-avatar.png"
+            }
+            alt="User Avatar"
             className="h-12 w-12 rounded-full"
+            width={48}
+            height={48}
           />
           <div className="h-max w-max rounded bg-green-500 px-3 py-2 text-white">
             Hello there!
@@ -301,10 +298,16 @@ const SellerInbox = ({
         </div>
 
         <div className="my-2 flex items-center gap-2">
-          <img
-            src={`${backend_url}${userData?.avatar}`}
-            alt=""
+          <Image
+            src={
+              userData?.avatar
+                ? `${backend_url}${userData.avatar}`
+                : "/assets/fallback-avatar.png"
+            }
+            alt="User Avatar"
             className="h-12 w-12 rounded-full"
+            width={48}
+            height={48}
           />
           <div className="h-max w-max rounded bg-green-500 px-3 py-2 text-white">
             How can I help you?
@@ -312,10 +315,16 @@ const SellerInbox = ({
         </div>
 
         <div className="my-2 flex items-center gap-2">
-          <img
-            src={`${backend_url}${userData?.avatar}`}
-            alt=""
+          <Image
+            src={
+              userData?.avatar
+                ? `${backend_url}${userData.avatar}`
+                : "/assets/fallback-avatar.png"
+            }
+            alt="User Avatar"
             className="h-12 w-12 rounded-full"
+            width={48}
+            height={48}
           />
           <div className="h-max w-max rounded bg-green-500 px-3 py-2 text-white">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
@@ -332,10 +341,16 @@ const SellerInbox = ({
               key={index}
             >
               {item.sender !== sellerId && (
-                <img
-                  src={`${backend_url}${userData?.avatar}`}
+                <Image
+                  src={
+                    userData?.avatar
+                      ? `${backend_url}${userData.avatar}`
+                      : "/assets/fallback-avatar.png"
+                  }
                   className="h-8 w-8 rounded-full"
-                  alt=""
+                  alt="User Avatar"
+                  width={32}
+                  height={32}
                 />
               )}
               <div
@@ -371,6 +386,6 @@ const SellerInbox = ({
       </div>
     </div>
   );
-};
+}
 
 export default DashBoardMessages;

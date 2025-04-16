@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import PaymentCartData from "./PaymentCartData";
 import PaymentInfo from "./PaymentInfo";
@@ -7,18 +9,18 @@ import {
   CardNumberElement,
 } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../../lib/server";
-import { clearCartAction } from "../../redux/actions/cart";
+import { server } from "../lib/server";
+import { clearCartAction } from "../redux/actions/cart";
 
 function Payment() {
   const { user } = useSelector((state) => state.user);
   const [orderData, setOrderData] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
@@ -87,7 +89,7 @@ function Payment() {
           console.log("Local storage cleared");
 
           setOpen(false);
-          navigate("/order/success");
+          router.push("/order/success");
           toast.success("Order successful!");
         }
       }
@@ -114,9 +116,9 @@ function Payment() {
       localStorage.setItem("latestOrder", JSON.stringify([]));
       dispatch(clearCartAction());
       setOpen(false);
-      navigate("/order/success");
+      router.push("/order/success");
       toast.success("Order successful!");
-      window.location.reload();
+      // Removed window.location.reload() to avoid full page refresh
     });
   };
 

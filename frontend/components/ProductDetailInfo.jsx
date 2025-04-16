@@ -1,17 +1,21 @@
-/* eslint-disable react/prop-types */
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { backend_url } from "../lib/server";
 import { useSelector } from "react-redux";
 import Ratings from "./Ratings";
 
+// Props:
+// - data: Object containing product details (description, shop, reviews)
 function ProductDetailInfo({ data }) {
   const [active, setActive] = useState(1);
   const { allProducts, products } = useSelector((state) => state.products);
 
   // Filter products by shop ID
   const shopProducts = allProducts.filter(
-    (product) => product.shopId === data.shop._id,
+    (product) => product.shopId === data.shop._id
   );
 
   const productReviewsLength =
@@ -23,7 +27,7 @@ function ProductDetailInfo({ data }) {
     products.reduce(
       (acc, product) =>
         acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
-      0,
+      0
     );
 
   const avg = totalRatings / productReviewsLength || 0;
@@ -88,12 +92,18 @@ function ProductDetailInfo({ data }) {
               {data?.reviews.length > 0 ? (
                 data.reviews.map((item, index) => (
                   <div key={index} className="my-4 flex items-center gap-3">
-                    <img
-                      src={`${backend_url}/${item?.user?.avatar}`}
-                      alt={item.user.name}
+                    <Image
+                      src={
+                        item?.user?.avatar
+                          ? `${backend_url}/${item.user.avatar}`
+                          : "/assets/fallback-image.png"
+                      }
+                      alt={item.user.name || "User"}
                       className="h-[50px] w-[50px] flex-shrink-0 rounded-full object-cover"
+                      width={50}
+                      height={50}
                     />
-                    <div className="">
+                    <div>
                       <div className="flex items-center gap-2">
                         <h1 className="text-lg font-semibold leading-8 text-gray-900">
                           {item.user.name}
@@ -120,14 +130,20 @@ function ProductDetailInfo({ data }) {
               <div className="w-full md:w-1/2">
                 <div className="flex items-center gap-2">
                   <div>
-                    <img
-                      src={`${backend_url}/${data?.shop?.avatar}`}
+                    <Image
+                      src={
+                        data?.shop?.avatar
+                          ? `${backend_url}/${data.shop.avatar}`
+                          : "/assets/fallback-image.png"
+                      }
                       className="h-12 w-12 rounded-full"
                       alt={data?.shop?.name || "Shop Avatar"}
+                      width={48}
+                      height={48}
                     />
                   </div>
                   <div>
-                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <Link href={`/shop/preview/${data?.shop._id}`}>
                       <h3 className="text-[15px] text-blue-400">
                         {data?.shop?.name || "Unknown Shop"}
                       </h3>
@@ -154,7 +170,7 @@ function ProductDetailInfo({ data }) {
                     Total Reviews{" "}
                     <span className="font-medium">{productReviewsLength}</span>
                   </h5>
-                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                  <Link href={`/shop/preview/${data?.shop._id}`}>
                     <button className="mt-2 cursor-pointer rounded-md bg-black px-10 py-2 text-white">
                       Visit Shop
                     </button>

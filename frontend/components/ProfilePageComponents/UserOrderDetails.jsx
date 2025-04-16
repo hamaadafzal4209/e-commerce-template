@@ -1,14 +1,17 @@
-/* eslint-disable no-unused-vars */
+"use client";
+
 import { useEffect, useState } from "react";
 import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { getAllOrdersOfUser } from "../../redux/actions/order";
-import { backend_url, server } from "../../server";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { getAllOrdersOfUser } from "../redux/actions/order";
+import { backend_url, server } from "../lib/server";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 function UserOrderDetails() {
   const { orders, isLoading } = useSelector((state) => state.orders);
@@ -20,7 +23,8 @@ function UserOrderDetails() {
   const [rating, setRating] = useState(1);
 
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id;
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
@@ -90,10 +94,16 @@ function UserOrderDetails() {
         data?.cart.map((item, index) => (
           <div key={index} className="mb-5 flex w-full items-start gap-4">
             <div className="flex flex-shrink-0 items-center justify-center bg-white">
-              <img
-                src={`${backend_url}/${item.images[0]}`}
+              <Image
+                src={
+                  item.images[0]
+                    ? `${backend_url}/${item.images[0]}`
+                    : "/assets/fallback-image.png"
+                }
                 className="h-20 w-20 bg-white object-contain"
-                alt=""
+                alt={item.name || "Product"}
+                width={80}
+                height={80}
               />
             </div>
             <div className="flex w-full flex-col items-start gap-4 md:flex-row">
@@ -106,7 +116,10 @@ function UserOrderDetails() {
               <div className="">
                 {!item.isReviewed && data?.status === "Delivered" && (
                   <button
-                    onClick={(e) => setOpen(true) || setSelectedItem(item)}
+                    onClick={() => {
+                      setOpen(true);
+                      setSelectedItem(item);
+                    }}
                     className="cursor-pointer whitespace-nowrap rounded-md bg-indigo-800 px-4 py-2 text-white"
                   >
                     Write a review
@@ -154,7 +167,7 @@ function UserOrderDetails() {
       </div>
       <br />
 
-      <Link to="">
+      <Link href="#">
         <button className="rounded-md bg-indigo-800 px-5 py-2.5 text-white">
           Send Message
         </button>
@@ -176,10 +189,16 @@ function UserOrderDetails() {
             </h2>
             <br />
             <div className="flex w-full">
-              <img
-                src={`${backend_url}/${selectedItem?.images[0]}`}
-                alt=""
+              <Image
+                src={
+                  selectedItem?.images[0]
+                    ? `${backend_url}/${selectedItem.images[0]}`
+                    : "/assets/fallback-image.png"
+                }
+                alt={selectedItem?.name || "Product"}
                 className="h-[80px] w-[80px]"
+                width={80}
+                height={80}
               />
               <div>
                 <div className="line-clamp-2 pl-3 text-lg">
@@ -229,7 +248,6 @@ function UserOrderDetails() {
               </label>
               <textarea
                 name="comment"
-                id=""
                 cols="20"
                 rows="5"
                 value={comment}

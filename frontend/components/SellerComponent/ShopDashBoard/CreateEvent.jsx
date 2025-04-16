@@ -1,16 +1,19 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { categoriesData } from "../../../lib/data";
-import { clearErrors, resetEventState } from "../../../redux/reducers/event";
-import { createEvent } from "../../../redux/actions/event";
+import { categoriesData } from "../lib/data";
+import { clearErrors, resetEventState } from "../redux/reducers/event";
+import { createEvent } from "../redux/actions/event";
+import Image from "next/image";
 
 function CreateEvent() {
   const { seller } = useSelector((state) => state.seller);
   const { success, error } = useSelector((state) => state.events);
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [images, setImages] = useState([]);
@@ -50,9 +53,9 @@ function CreateEvent() {
     if (success) {
       toast.success("Event created successfully");
       dispatch(resetEventState());
-      navigate("/dashboard-events");
+      router.push("/dashboard-events");
     }
-  }, [success, navigate, dispatch]);
+  }, [success, router, dispatch]);
 
   useEffect(() => {
     if (error) {
@@ -243,10 +246,12 @@ function CreateEvent() {
                       key={index}
                       className="h-20 w-20 overflow-hidden rounded-md"
                     >
-                      <img
+                      <Image
                         src={URL.createObjectURL(image)}
                         alt="product"
                         className="h-full w-full object-cover"
+                        width={80}
+                        height={80}
                       />
                     </div>
                   ))}
