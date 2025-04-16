@@ -1,3 +1,4 @@
+"use client";
 import ProfilePage from "@/pages/ProfilePage";
 import ProtectedRoute from "@/pages/ProtectedRoute";
 

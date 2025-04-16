@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import ProductDetailsPopup from "./ProductDetailsPopup";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocartAction, removeFromCartAction } from "../redux/actions/cart";
 import {

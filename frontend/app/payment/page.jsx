@@ -1,3 +1,5 @@
+"use client";
+
 import PaymentPage from "@/pages/PaymentPage";
 import ProtectedRoute from "@/pages/ProtectedRoute";
 

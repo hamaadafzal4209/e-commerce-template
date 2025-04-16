@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 import { useSelector } from "react-redux";
 import Ratings from "./Ratings";
 

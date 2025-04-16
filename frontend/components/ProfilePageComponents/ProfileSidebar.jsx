@@ -10,7 +10,7 @@ import { TbAddressBook } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../../server";
+import { server } from "../../lib/server";
 
 function ProfileSidebar({ active, setActive }) {
   const navigate = useNavigate();

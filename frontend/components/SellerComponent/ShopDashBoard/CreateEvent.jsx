@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { categoriesData } from "../../../static/data";
+import { categoriesData } from "../../../lib/data";
 import { clearErrors, resetEventState } from "../../../redux/reducers/event";
 import { createEvent } from "../../../redux/actions/event";
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { server } from "../../server";
+import { server } from "../../lib/server";
 import {
   createEventFail,
   createEventRequest,

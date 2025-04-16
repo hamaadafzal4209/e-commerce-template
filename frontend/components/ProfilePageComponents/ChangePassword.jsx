@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
-import { server } from "../../server";
+import { server } from "../../lib/server";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");

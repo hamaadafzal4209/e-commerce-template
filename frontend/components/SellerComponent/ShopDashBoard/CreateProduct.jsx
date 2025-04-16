@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { categoriesData } from "../../../static/data";
+import { categoriesData } from "../../../lib/data";
 import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import {

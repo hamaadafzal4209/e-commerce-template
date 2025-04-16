@@ -1,10 +1,10 @@
 import OrderDetailPage from "@/pages/OrderDetailPage";
 import ProtectedRoute from "@/pages/ProtectedRoute";
 
-export default function OrderDetail() {
+export default function OrderDetailPageWrapper({ params }) {
   return (
     <ProtectedRoute>
-      <OrderDetailPage />
+    <OrderDetailPage orderId={params.id} />;
     </ProtectedRoute>
   );
 }

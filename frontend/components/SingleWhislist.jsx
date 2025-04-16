@@ -1,5 +1,5 @@
 import { IoClose, IoCartOutline } from "react-icons/io5";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 
 function SingleWhislist({ data, removeFromWishlistHandler, handleAddToCart }) {
   return (

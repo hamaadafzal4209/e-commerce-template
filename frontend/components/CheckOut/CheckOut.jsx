@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../../server";
+import { server } from "../../lib/server";
 
 function CheckOut() {
   const { user } = useSelector((state) => state.user);

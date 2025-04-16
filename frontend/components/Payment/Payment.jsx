@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../../server";
+import { server } from "../../lib/server";
 import { clearCartAction } from "../../redux/actions/cart";
 
 function Payment() {

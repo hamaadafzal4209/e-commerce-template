@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { categoriesData, navItems } from "../static/data";
+import { categoriesData, navItems } from "../lib/data";
 import { Link, NavLink } from "react-router-dom";
 import {
   AiOutlineHeart,
@@ -13,7 +13,7 @@ import classNames from "classnames";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 import CartPopUp from "./CartPopUp";
 import WhishListPopUp from "./WhishListPopUp";
 import { RxCross1 } from "react-icons/rx";

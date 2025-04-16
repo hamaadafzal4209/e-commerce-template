@@ -1,3 +1,5 @@
+"use client"; // Required for client-side interactivity
+
 import { useState, useEffect } from "react";
 import { RxCross1 } from "react-icons/rx";
 import {
@@ -6,8 +8,8 @@ import {
   AiFillHeart,
   AiOutlineHeart,
 } from "react-icons/ai";
-import { backend_url } from "../server";
-import { Link } from "react-router-dom";
+import { backend_url } from "../lib/server";
+import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { addTocartAction, removeFromCartAction } from "../redux/actions/cart";
@@ -99,7 +101,7 @@ function ProductDetailsPopup({ setOpen, data }) {
                     />
                   </div>
                   <div>
-                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <Link href={`/shop/preview/${data?.shop._id}`}>
                       <h3 className="text-[15px] text-blue-400">
                         {data.shop.name || "Unknown Shop"}
                       </h3>

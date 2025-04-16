@@ -9,7 +9,7 @@ import {
   footercompanyLinks,
   footerProductLinks,
   footerSupportLinks,
-} from "../static/data";
+} from "../lib/data";
 
 function Footer() {
   return (

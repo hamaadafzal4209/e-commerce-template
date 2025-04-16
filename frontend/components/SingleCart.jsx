@@ -1,8 +1,9 @@
 // SingleCart.js
+"use client"
 import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 
 function SingleCart({ data, quantityChangeHandler, removeFromCartHandler }) {
   const [value, setValue] = useState(data.qty);

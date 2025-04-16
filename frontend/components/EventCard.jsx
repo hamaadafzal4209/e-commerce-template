@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-import { backend_url } from "../server";
+import { backend_url } from "../lib/server";
 import EventCountDown from "./EventCountDown";
 
 function EventCard({ data }) {

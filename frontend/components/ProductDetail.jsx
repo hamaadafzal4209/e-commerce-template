@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import ProductDetailInfo from "./ProductDetailInfo";
-import { backend_url, server } from "../server";
+import { backend_url, server } from "../lib/server";
 import Loader from "./Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
