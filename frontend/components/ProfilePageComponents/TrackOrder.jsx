@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
-import { getAllOrdersOfUser } from "../redux/actions/order";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 import {
   MdLocalShipping,
   MdCheckCircle,

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { getAllOrdersOfShop } from "../redux/actions/order";
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 
 function DashAllRefundOrders() {
   const { orders, isLoading } = useSelector((state) => state.orders);

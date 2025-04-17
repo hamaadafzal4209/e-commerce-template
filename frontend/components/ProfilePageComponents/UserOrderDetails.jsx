@@ -5,7 +5,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAllOrdersOfUser } from "../redux/actions/order";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 import { backend_url, server } from "../lib/server";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";

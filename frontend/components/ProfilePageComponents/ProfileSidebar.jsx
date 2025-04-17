@@ -9,7 +9,7 @@ import { TbAddressBook } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../lib/server";
+import { server } from "../../lib/server";
 
 // Props:
 // - active: Number indicating the active menu item

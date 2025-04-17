@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import Link from "next/link";
 import { getAllOrdersOfShop } from "@/redux/actions/order";
 import { getAllShopProducts } from "@/redux/actions/product";
-import Loader from "../Loader";
+import Loader from "../../Loader";
 
 function DashBoardHero() {
   const dispatch = useDispatch();

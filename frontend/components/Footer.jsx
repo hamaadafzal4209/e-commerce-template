@@ -9,8 +9,8 @@ import {
   AiOutlineTwitter,
 } from "react-icons/ai";
 import {
-  footercompanyLinks,
   footerProductLinks,
+  footercompanyLinks,
   footerSupportLinks,
 } from "../lib/data";
 
@@ -71,12 +71,18 @@ function Footer() {
           <ul>
             {footerProductLinks.map((link, index) => (
               <li key={index}>
-                <Link
-                  href={link.link}
-                  className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
-                >
-                  {link.name}
-                </Link>
+                {link.link ? (
+                  <Link
+                    href={link.link}
+                    className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <span className="text-gray-400 text-sm leading-6">
+                    {link.name}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -87,12 +93,18 @@ function Footer() {
           <ul>
             {footercompanyLinks.map((link, index) => (
               <li key={index}>
-                <Link
-                  href={link.link}
-                  className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
-                >
-                  {link.name}
-                </Link>
+                {link.link ? (
+                  <Link
+                    href={link.link}
+                    className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <span className="text-gray-400 text-sm leading-6">
+                    {link.name}
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -103,12 +115,18 @@ function Footer() {
           <ul>
             {footerSupportLinks.map((link, index) => (
               <li key={index}>
-                <Link
-                  href={link.link}
-                  className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
-                >
-                  {link.name}
-                </Link>
+                {link.link ? (
+                  <Link
+                    href={link.link}
+                    className="text-gray-400 hover:text-teal-400 duration-300 text-sm cursor-pointer leading-6"
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <span className="text-gray-400 text-sm leading-6">
+                    {link.name}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { backend_url } from "../lib/server";
 import CartPopUp from "./CartPopUp";
 import WhishListPopUp from "./WhishListPopUp";
+import logo from "../public/assets/logo.png"
 
 function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -36,7 +37,6 @@ function Header() {
   const [openWhishlist, setOpenWhishlist] = useState(false);
   const [openNavbar, setOpenNNavbar] = useState(false);
   const pathname = usePathname();
-
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -75,7 +75,7 @@ function Header() {
           <div>
             <Link href="/">
               <Image
-                src="/assets/logo.jpeg"
+                src={logo}
                 alt="Logo"
                 width={130}
                 height={50}
@@ -145,7 +145,7 @@ function Header() {
           <div>
             <Link href="/">
               <Image
-                src="/assets/logo.jpeg"
+                 src={logo}
                 alt="Logo"
                 width={120}
                 height={40}

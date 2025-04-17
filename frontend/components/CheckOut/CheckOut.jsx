@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../lib/server";
+import { server } from "../../lib/server";
 
 function CheckOut() {
   const { user } = useSelector((state) => state.user);

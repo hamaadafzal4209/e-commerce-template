@@ -1,3 +1,5 @@
+"use client";
+
 import DashBoardHeader from "../../components/SellerComponent/ShopDashBoard/DashBoardHeader";
 import DashBoardHero from "../../components/SellerComponent/ShopDashBoard/DashBoardHero";
 import DashSidebar from "../../components/SellerComponent/ShopDashBoard/DashSidebar";
@@ -7,11 +9,10 @@ function ShopDashBoard() {
     <div>
       <DashBoardHeader />
       <div className="flex">
-        {/* sidebar */}
         <div>
           <DashSidebar active={1} />
         </div>
-        <DashBoardHero/>
+        <DashBoardHero />
       </div>
     </div>
   );

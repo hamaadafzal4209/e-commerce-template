@@ -10,7 +10,7 @@ import {
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import ProductDetailInfo from "./ProductDetailInfo";
 import { backend_url, server } from "../lib/server";
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";

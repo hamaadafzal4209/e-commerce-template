@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { backend_url, server } from "../../server";
+import { backend_url, server } from "../../lib/server";
 import { AiOutlineCamera } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";

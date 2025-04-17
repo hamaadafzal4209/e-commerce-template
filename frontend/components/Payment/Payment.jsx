@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { server } from "../lib/server";
+import { server } from "../../lib/server";
 import { clearCartAction } from "../redux/actions/cart";
 
 function Payment() {

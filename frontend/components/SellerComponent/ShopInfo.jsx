@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getAllShopProducts } from "../redux/actions/product";
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 import Image from "next/image";
 
 function ShopInfo({ isOwner }) {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
-import { getAllOrdersOfUser } from "../redux/actions/order";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
 import { useDispatch, useSelector } from "react-redux";
 
 function TrackOrders() {

@@ -6,8 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllOrdersOfUser } from "../redux/actions/order";
-import Loader from "./Loader";
+import { getAllOrdersOfUser } from "../../redux/actions/order";
+import Loader from "../../components/Loader";
 
 function AllRefundOrders() {
   const { orders, isLoading } = useSelector((state) => state.orders);
