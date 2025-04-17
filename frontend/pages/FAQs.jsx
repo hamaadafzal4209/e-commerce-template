@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import Footer from "@/components/Footer"; // Updated import path for Next.js (was "../components/Footer")
 import Header from "@/components/Header"; // Updated import path for Next.js (was "../components/Header")
