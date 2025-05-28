@@ -5,6 +5,7 @@ import sendMail from "../utils/sendMail.js";
 import jwt from "jsonwebtoken";
 import sendShopToken from "../utils/ShopToken.js";
 import path from "path";
+<<<<<<< HEAD
 import fs from "fs";
 
 export const createShop = async (req, res, next) => {
@@ -15,15 +16,36 @@ export const createShop = async (req, res, next) => {
     const shopEmail = await shopModel.findOne({ email });
     if (shopEmail) {
       return next(new ErrorHandler("User already exists", 400));
+=======
+import fs from "fs";  
+
+
+// Modified to fix the token issue
+export const createShop = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, email, password, phoneNumber, address, zipCode } = req.body
+
+    // Check if user with the provided email already exists
+    const shopEmail = await shopModel.findOne({ email })
+    if (shopEmail) {
+      return next(new ErrorHandler("User already exists", 400))
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
     }
 
     // Check if file is provided
     if (!req.file) {
+<<<<<<< HEAD
       return next(new ErrorHandler("Avatar file is required", 400));
     }
 
     const image_filename = `${req.file.filename}`;
 
+=======
+      return next(new ErrorHandler("Avatar file is required", 400))
+    }
+
+    const image_filename = `${req.file.filename}`
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
     const seller = {
       name,
       email,
@@ -32,17 +54,26 @@ export const createShop = async (req, res, next) => {
       address,
       zipCode,
       avatar: image_filename,
+<<<<<<< HEAD
     };
 
     const activationToken = createActivationToken(seller);
 
     const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+=======
+    }
+
+    const activationToken = createActivationToken(seller)
+
+    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
     try {
       await sendMail({
         email: seller.email,
         subject: "Activate your Shop",
         message: `Hello ${seller.name}, please click on the link to activate your shop ${activationUrl}`,
+<<<<<<< HEAD
       });
       res.status(200).json({
         success: true,
@@ -120,6 +151,136 @@ export const shopLogin = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+=======
+      })
+      res.status(200).json({
+        success: true,
+        message: `please check your email:- ${seller.email} to activate your shop`,
+      })
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500))
+    }
+  } catch (error) {
+    console.error("Create Shop Error:", error)
+    next(new ErrorHandler("Error creating shop: " + error.message, 400))
+  }
+})
+
+// create activationtoken
+const createActivationToken = (seller) => {
+  return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
+    expiresIn: "5m",
+  })
+}
+
+// activate shop - FIXED with better error handling
+export const activateSellerShop = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { activation_token } = req.body
+    if (!activation_token) {
+      console.error("No activation token provided")
+      return next(new ErrorHandler("Activation token is required", 400))
+    }
+
+    let seller
+    try {
+      seller = jwt.verify(activation_token, process.env.ACTIVATION_SECRET)
+    } catch (jwtError) {
+      console.error("JWT Verification Error:", jwtError.message)
+      return next(new ErrorHandler("Invalid or expired activation token", 400))
+    }
+
+    if (!seller) {
+      console.error("Invalid token - no seller data")
+      return next(new ErrorHandler("Invalid Token", 400))
+    }
+
+    const { name, email, password, avatar, zipCode, address, phoneNumber } = seller
+
+    // Check if seller already exists
+    const existingSeller = await shopModel.findOne({ email })
+    if (existingSeller) {
+      return next(new ErrorHandler("Seller already exists", 400))
+    }
+
+    try {
+      // Create the new seller with all required fields
+      const newSeller = new shopModel({
+        name,
+        email,
+        password,
+        phoneNumber,
+        address,
+        zipCode,
+        avatar,
+        role: "seller",
+      })
+
+      // Save the seller to the database
+      await newSeller.save()
+      // Send the token
+      sendShopToken(newSeller, 201, res)
+    } catch (dbError) {
+      console.error("Database Error:", dbError)
+      return next(new ErrorHandler(`Error saving seller: ${dbError.message}`, 500))
+    }
+  } catch (error) {
+    console.error("Activation Error:", error.message)
+    return next(new ErrorHandler(error.message, 500))
+  }
+})
+
+
+
+
+// shop login
+export const shopLogin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return next(new ErrorHandler("Please provide all fields!", 400))
+    }
+
+    // Find the shop with email and include the password field
+    const shop = await shopModel.findOne({ email }).select("+password")
+
+    if (!shop) {
+      return next(new ErrorHandler("Shop doesn't exist!", 400))
+    }
+
+    // Compare passwords
+    const isPasswordValid = await shop.comparePassword(password)
+
+    if (!isPasswordValid) {
+      return next(new ErrorHandler("Please provide the correct information", 400))
+    }
+
+    // Generate token directly
+    const token = shop.getJwtToken()
+
+    // Set cookie options
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      sameSite: "lax", // Changed from "none" to "lax" for local development
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+    }
+
+
+    // Set cookie and send response
+    res.status(200).cookie("seller_token", token, options).json({
+      success: true,
+      shop,
+      token,
+    })
+  } catch (error) {
+    console.error("Shop Login Error:", error)
+    return next(new ErrorHandler(error.message, 500))
+  }
+})
+
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
 export const loadShop = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -129,8 +290,11 @@ export const loadShop = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Shop not found", 400));
     }
 
+<<<<<<< HEAD
     // console.log("Load Shop - Seller:", seller);
 
+=======
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
     res.status(200).json({
       success: true,
       seller,
@@ -140,6 +304,7 @@ export const loadShop = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 export const logout = catchAsyncErrors(async (req, res, next) => {
   try {
     res.cookie("seller_token", null, {
@@ -155,6 +320,35 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+=======
+// logout from shop
+export const logout = catchAsyncErrors(async (req, res, next) => {
+  try {
+    // Set cookie options to match the ones used when setting the cookie
+    const options = {
+      expires: new Date(0), // Set to epoch time (1970) to ensure immediate expiration
+      httpOnly: true,
+      sameSite: "lax", // Match the setting used when creating the cookie
+      secure: process.env.NODE_ENV === "production", // Only secure in production
+      path: "/", // Ensure the cookie path matches
+    }
+    // Clear the seller_token cookie
+    res.cookie("seller_token", null, options)
+
+    // Also clear any localStorage items in the client
+    res.status(200).json({
+      success: true,
+      message: "Logout Successful!",
+    })
+  } catch (error) {
+    console.error("Shop logout error:", error)
+    return next(new ErrorHandler(error.message, 500))
+  }
+})
+
+
+
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
 // get shop info
 export const getShopInfo = catchAsyncErrors(async (req, res, next) => {
@@ -225,4 +419,8 @@ export const updateSellerInfo = catchAsyncErrors(async (req, res, next) => {
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014

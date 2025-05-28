@@ -22,7 +22,11 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",
     "multer": "^1.4.5-lts.1",
+<<<<<<< HEAD
     "nodemailer": "^6.9.14",
+=======
+    "nodemailer": "^6.10.1",
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
     "nodemon": "^3.1.9",
     "stripe": "^16.6.0"
   }

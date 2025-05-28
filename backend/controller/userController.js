@@ -34,7 +34,11 @@ export const createUser = async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
+<<<<<<< HEAD
     const activationUrl = `http://localhost:5173/activation/${activationToken}`;
+=======
+    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
     try {
       await sendMail({
@@ -149,6 +153,7 @@ export const Logout = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 // update user info
 export const updateUserInfo = catchAsyncErrors(async (req, res, next) => {
   try {
@@ -176,15 +181,49 @@ export const updateUserInfo = catchAsyncErrors(async (req, res, next) => {
     console.log("Updating user with phoneNumber:", user.phoneNumber);
 
     await user.save();
+=======
+
+
+// update user info - simplified to only update name and phone number
+export const updateUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, phoneNumber } = req.body
+
+    // Ensure the user exists - find by ID from token
+    const userId = req.user.id
+    const user = await userModel.findById(userId)
+
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404))
+    }
+
+    // Update only name and phone number
+    user.name = name
+    user.phoneNumber = phoneNumber
+
+    await user.save()
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
     res.status(200).json({
       success: true,
       user,
+<<<<<<< HEAD
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+=======
+      message: "Profile updated successfully",
+    })
+  } catch (error) {
+    console.error("Error in updateUserInfo:", error)
+    return next(new ErrorHandler(error.message || "Failed to update profile", 500))
+  }
+})
+
+
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
 // update user avatar
 export const updateUserAvatar = catchAsyncErrors(async (req, res, next) => {
@@ -313,3 +352,32 @@ export const getUserInfo = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+<<<<<<< HEAD
+=======
+
+export const sendContactForm = async (req, res) => {
+  try {
+    const { email, subject, directHtml } = req.body;
+
+    // Validate required fields
+    if (!email || !subject || !directHtml) {
+      return res.status(400).json({ success: false, message: "Please provide all required fields" });
+    }
+
+    // Send the email using the sendMail service
+    await sendMail({
+      email,
+      subject,
+      html: directHtml,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    console.error("Error in sendContactForm:", error);
+    res.status(500).json({ success: false, message: error.message || "Failed to send email" });
+  }
+};
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014

@@ -1,4 +1,8 @@
 import ErrorHandler from "../utils/ErrorHandler.js";
+<<<<<<< HEAD
+=======
+import userModel from "../model/userModel.js";
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 
 const errorHandlerMiddleware = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;

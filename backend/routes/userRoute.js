@@ -11,6 +11,10 @@ import {
   deleteUserAddress,
   updateUserPassword,
   getUserInfo,
+<<<<<<< HEAD
+=======
+  sendContactForm,
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 } from "../controller/userController.js";
 import multer from "multer";
 import { isAuthenticated } from "../middleware/auth.js";
@@ -30,7 +34,11 @@ userRouter.post("/create-user", upload.single("file"), createUser);
 userRouter.post("/activation", activateUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/getuser", isAuthenticated, getUser);
+<<<<<<< HEAD
 userRouter.get("/logout", isAuthenticated, Logout);
+=======
+userRouter.get("/logout",Logout);
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 userRouter.put("/update-user-info", isAuthenticated, updateUserInfo);
 userRouter.put(
   "/update-avatar",
@@ -47,4 +55,9 @@ userRouter.delete(
 userRouter.put("/update-user-password", isAuthenticated, updateUserPassword);
 userRouter.get("/user-info/:id", getUserInfo);
 
+<<<<<<< HEAD
+=======
+userRouter.post("/send-email", sendContactForm);
+
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 export default userRouter;

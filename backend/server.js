@@ -25,7 +25,11 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 app.use(
   cors({
+<<<<<<< HEAD
     origin: "http://localhost:5173",
+=======
+    origin: "http://localhost:3000",
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
     credentials: true,
   })
 );
@@ -48,6 +52,12 @@ app.use("/api/order", orderRouter);
 app.use("/api/conversation", conversationRouter);
 app.use("/api/message", messageRouter);
 
+<<<<<<< HEAD
+=======
+app.use("/health", (req, res) => {
+  res.send("Server is running with good health");
+});
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
 // unhandled promise rejection
 process.on("unhandledRejection", (err) => {
   console.log(`Shutting down the server for ${err.message}`);
@@ -61,3 +71,17 @@ app.use(errorHandlerMiddleware);
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });
+<<<<<<< HEAD
+=======
+
+
+
+app.use("*", (req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+
+// ADD THIS AT THE END INSTEAD OF app.listen()
+export default app;
+
+>>>>>>> c8f501c28b9fb24393c62733839fe05d0f190014
